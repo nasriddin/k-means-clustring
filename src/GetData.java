@@ -8,7 +8,10 @@ import java.util.Iterator;
 import java.util.List;
 
 public class GetData {
-    protected List<double[]> numbers=new ArrayList<>();
+
+    protected List<String> numbers = new ArrayList<>();
+    protected static int counter;
+
 
     void getData(String s) throws NumberFormatException, IOException {
 
@@ -16,19 +19,13 @@ public class GetData {
         try {
             BufferedReader getData = new BufferedReader(new FileReader(file));
             String line;
-            while((line=getData.readLine()) != null)
-            {
-                System.out.print(line);
-                break;
-//                String[] split = line.split(",");
-//                double[] feature = new double[split.length - 1];
-//                for (int i = 0; i < split.length - 1; i++)
-//                    feature[i] = Double.parseDouble(split[i]);
-//                String labels = split[feature.length];
+            while ((line = getData.readLine()) != null) {
+                numbers.add(line);
+                counter = line.length() - 1;
             }
-
-        }catch (FileNotFoundException e) {
+        } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
+
     }
 }
