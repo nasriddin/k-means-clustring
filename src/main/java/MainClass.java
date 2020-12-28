@@ -17,8 +17,8 @@ public class MainClass extends GetData {
         GetData data = new GetData();
         ClustererClass cluster = new ClustererClass();
         data.dimension.clear();
-        System.out.println("Enter the filename with path");
         // /home/nasriddin/Inha/BigData/K_Means_clustring/Dataset1.txt
+        // /home/nasriddin/Inha/BigData/K_Means_clustring/Dataset2.txt
         System.out.println("Enter the filename with path");
 
         String file = scanner.next();
@@ -79,7 +79,7 @@ public class MainClass extends GetData {
             System.out.println(""+integer+ Arrays.toString(Arrays.stream(strings.get(center_index)).toArray()));
 
 
-            File file = new File("set1-c" + integer + ".txt");
+            File file = new File("set2-c" + integer + ".txt");
 
             file.exists();
             try {
