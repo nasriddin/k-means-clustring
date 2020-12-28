@@ -1,11 +1,10 @@
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.*;
 
 public class MainClass extends GetData {
 
-    //    get Dataset / read Dataset
-//    make first clustering
-//    make loop clustering according to K
     public static void main(String args[]) throws IOException {
 
         Scanner scanner = new Scanner(System.in);
@@ -17,8 +16,7 @@ public class MainClass extends GetData {
         System.out.println("Enter the filename with path");
 
         String file = scanner.next();
-        data.getData("/home/nasriddin/Inha/BigData/K_Means_clustring/Dataset1.txt");
-//        System.out.println(data.getData(file));
+        data.getData(file);
 
         int execution = 1;
 
@@ -29,115 +27,68 @@ public class MainClass extends GetData {
 
             for (int i = 0; i < centers.length; i++) {
                 centers[i] = new Random().nextInt(5000);
-//                System.out.println(centers[i]);
             }
             Arrays.sort(centers);
 
-//            System.out.println(Arrays.toString(centers));
 
-            Map<Integer, String[]> firstClustered = new HashMap<>();
+            Map<Integer, List<String[]>> firstClustered = new HashMap<>();
             firstClustered = kmeans(numbers, centers, clusters);
 
-
-
-//            TODO Get index of them and select first K points then make a loop. do not go for features
-//            double[] jj = new double[dimensionNumber];
-//            int a = 0;
-//            for (int i = 0; i < clusters; i++) {
-//                jj = data.dimension.get(a++);
-//                centers.put(i, jj);
-//            }
-//            Map<double[], Integer> clusterings = new HashMap<>();
-//            clusterings = kmeans(data.dimension, centers, clusters);
-//            System.out.println(Arrays.toString(data.dimension.get(0)));
-//
-//            for (double[] key : clusterings.keySet()) {
-//                for (int i = 0; i < key.length; i++) {
-//                    System.out.print(key[i] + " ");
-//                }
-//                System.out.print(clusterings.get(key) + "\n");
-//            }
-//
-//            double dimensionalTwo[] = new double[dimensionNumber];
-//
-//            for (int i = 0; i < iteration; i++) {
-//                for (int j = 0; j < clusters; j++) {
-//                    List<double[]> list = new ArrayList<>();
-//                    for (double[] key : clusterings.keySet()) {
-//                        if (clusterings.get(key) == j) {
-//                            list.add(key);
-//                        }
-//                    }
-//
-//                    dimensionalTwo = centerCalculator(list);
-//                    centers.put(j, dimensionalTwo);
-//
-//                }
-//
-//                clusterings.clear();
-//                clusterings = kmeans(data.dimension, centers, clusters);
-//            }
-//
-//            System.out.println("\nFinal clustering");
-//            System.out.println("First dimension\tSecond dimension");
-//
-//            for (double[] key : clusterings.keySet()) {
-//                for (int i = 0; i < key.length; i++) {
-//                    System.out.print(key[i] + "\t \t");
-//                }
-//                System.out.print(clusterings.get(key) + "\n");
-//            }
             execution = scanner.nextInt();
 
         } while (execution == 1);
 
 
     }
-//    private int randomNumber(){
-//
-//
-//        return
-//    }
-
-    public static double[] centerCalculator(List<double[]> a) {
-
-        int count = 0;
-        double sum = 0;
-        double[] centers = new double[GetData.dimensionNumber];
-        for (int i = 0; i < GetData.dimensionNumber; i++) {
-            sum = 0.0;
-            count = 0;
-            for (double[] x : a) {
-                count++;
-                sum = sum + x[i];
-            }
-            centers[i] = sum / count;
-        }
-        return centers;
-
-    }
 
 
-    public static Map<Integer, String[]> kmeans(List<String[]> features, double[] centers, int cluster) {
-        Map<Integer, String[]> clusters = new HashMap<>();
+
+
+    public static Map<Integer, List<String[]>> kmeans(List<String[]> features, double[] centers, int cluster) {
+        Map<Integer, List<String[]>> clusters = new HashMap<>();
+        int indexes[];
         int cluster1 = 0;
         int dist = 0;
-        int minimum = 5000;
         for (int i = 0; i < features.toArray().length; i++) {
+            int minimum = 5000;
             String[] x = features.get(i);
-            int t=0;
+            int t = 0;
+            System.out.println(cluster);
             for (int j = 0; j < cluster; j++) {
 
                 dist = ClustererClass.distanceGet(centers[j], i);
                 if (dist < minimum) {
                     minimum = dist;
                     cluster1 = j;
+
                 }
+
             }
-//            if (clusters.get(cluster1 - 1))
-            clusters.put(cluster1, x);
+            List<String[]> list = new ArrayList<>();
+            if (clusters.get(cluster1) != null) list.addAll(clusters.get(cluster1));
+            list.add(x);
+            clusters.put(cluster1, list);
         }
-        System.out.println(Arrays.toString(clusters.keySet().toArray()));
+        clusters.forEach((integer, strings) -> {
+            File file = new File("set1-c"+integer+".txt");
+            file.exists();
+            try {
+                FileWriter writer = new FileWriter(file);
+                strings.forEach(strings1 -> {
+                    try {
+                        writer.write(Arrays.toString(strings1));
+                        writer.write("\n");
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                });
+                writer.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+        });
+        System.out.println(Arrays.toString(clusters.get(0).toArray()));
 
         return clusters;
     }

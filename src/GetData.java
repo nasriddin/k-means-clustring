@@ -27,7 +27,7 @@ public class GetData {
                 numbers.add(split);
                 counter = line.length() + 1;
             }
-//            System.out.println(Arrays.toString(numbers.get(0)));
+            System.out.println(Arrays.toString(numbers.get(0)));
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
