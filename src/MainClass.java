@@ -1,7 +1,7 @@
 import java.io.IOException;
 import java.util.*;
 
-public class MainClass {
+public class MainClass extends GetData {
 
     //    get Dataset / read Dataset
 //    make first clustering
@@ -11,7 +11,7 @@ public class MainClass {
         Scanner scanner = new Scanner(System.in);
         GetData data = new GetData();
         ClustererClass cluster = new ClustererClass();
-        data.features.clear();
+        data.dimension.clear();
         System.out.println("Enter the filename with path");
 
         String file = scanner.next();
@@ -25,19 +25,26 @@ public class MainClass {
             Map<Integer, double[]> centers = new HashMap<>();
 
 //            TODO Get index of them and select first K points then make a loop. do not go for features
-//            double[] jj = new double[numberOfFeatures];
-//            int a = 0;
-//            for (int i = 0; i < clusters; i++){
-//
-//                jj = data.features.get(a++);
-//                centers.put(i, jj);
-//
-//            }
-//            Map<double[], Integer> clusterings = new HashMap<>();
-//            clusterings = kmeans(data.features, distance, centroids, k);
+            double[] jj = new double[dimensionNumber];
+            int a = 0;
+            for (int i = 0; i < clusters; i++) {
+
+                jj = data.dimension.get(a++);
+                centers.put(i, jj);
+
+            }
+            Map<double[], Integer> clusterings = new HashMap<>();
+            clusterings = kmeans(data.dimension, centers, clusters);
+
+            for (double[] key : clusterings.keySet()) {
+                for (int i = 0; i < key.length; i++) {
+                    System.out.print(key[i] + ", ");
+                }
+                System.out.print(clusterings.get(key) + "\n");
+            }
 
 
-        }while(execution == 1);
+        } while (execution == 1);
 
 
     }
@@ -47,8 +54,25 @@ public class MainClass {
 //        return
 //    }
 
-    public static Map<double[], Integer> kmeans(List<double[]> features, int distance, Map<Integer, double[]> centroids, int k){
+    public static Map<double[], Integer> kmeans(List<double[]> features, Map<Integer, double[]> centers, int cluster) {
+        Map<double[], Integer> clusters = new HashMap<>();
+        int cluster1 = 0;
+        double dist = 0.0;
+        for (double[] x : features) {
+            double minimum = 999999.0;
+            for (int j = 0; j < cluster; j++) {
 
+                    dist = ClustererClass.distanceGet(centers.get(j), x);
+                if (dist < minimum) {
+                    minimum = dist;
+                    cluster1 = j;
+                }
+
+            }
+            clusters.put(x, cluster1);
+        }
+
+        return clusters;
     }
 }
 

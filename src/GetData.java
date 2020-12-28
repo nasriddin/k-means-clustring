@@ -10,7 +10,9 @@ import java.util.List;
 public class GetData {
 
     protected List<String> numbers = new ArrayList<>();
+    protected List<double[]> dimension = new ArrayList<>();
     protected static int counter;
+    protected static int dimensionNumber;
 
 
     void getData(String s) throws NumberFormatException, IOException {
@@ -20,7 +22,12 @@ public class GetData {
             BufferedReader getData = new BufferedReader(new FileReader(file));
             String line;
             while ((line = getData.readLine()) != null) {
-                numbers.add(line);
+                String[] split = line.split(" ");
+                double[] feature = new double[split.length - 1];
+                dimensionNumber = split.length - 1;
+                dimension.add(feature);
+                String labels = split[feature.length];
+                numbers.add(labels);
                 counter = line.length() - 1;
             }
         } catch (FileNotFoundException e) {
