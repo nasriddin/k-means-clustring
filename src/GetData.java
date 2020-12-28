@@ -4,12 +4,13 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 public class GetData {
 
-    protected List<String> numbers = new ArrayList<>();
+    protected static List<String[]> numbers = new ArrayList<>();
     protected List<double[]> dimension = new ArrayList<>();
     protected static int counter;
     protected static int dimensionNumber;
@@ -22,17 +23,15 @@ public class GetData {
             BufferedReader getData = new BufferedReader(new FileReader(file));
             String line;
             while ((line = getData.readLine()) != null) {
-                String[] split = line.split(" ");
-                double[] feature = new double[split.length - 1];
-                dimensionNumber = split.length - 1;
-                dimension.add(feature);
-                String labels = split[feature.length];
-                numbers.add(labels);
-                counter = line.length() - 1;
+                String[] split = line.trim().split("\t");
+                numbers.add(split);
+                counter = line.length() + 1;
             }
+//            System.out.println(Arrays.toString(numbers.get(0)));
+
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
+//        System.out.println(numbers.get(0));
     }
 }
