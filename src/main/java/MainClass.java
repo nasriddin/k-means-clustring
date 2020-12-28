@@ -38,7 +38,7 @@ public class MainClass extends GetData {
             System.out.println("First centers: "+ Arrays.toString(Arrays.stream(centers).toArray()));
 
             Map<Integer, List<String[]>> firstClustered = new HashMap<>();
-            firstClustered = kmeans(numbers, centers, clusters);
+            firstClustered = kMeaning(numbers, centers, clusters);
 
             execution = scanner.nextInt();
 
@@ -49,7 +49,7 @@ public class MainClass extends GetData {
 
 
 
-    public static Map<Integer, List<String[]>> kmeans(List<String[]> features, double[] centers, int cluster) {
+    public static Map<Integer, List<String[]>> kMeaning(List<String[]> features, double[] centers, int cluster) {
         Map<Integer, List<String[]>> clusters = new HashMap<>();
         int indexes[];
         int cluster1 = 0;
