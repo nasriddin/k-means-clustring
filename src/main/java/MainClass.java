@@ -1,11 +1,17 @@
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+
+import java.io.*;
 import java.util.*;
 
 public class MainClass extends GetData {
 
     public static void main(String args[]) throws IOException {
+//        File file = new File("final-centers-1.txt");
 
         Scanner scanner = new Scanner(System.in);
         GetData data = new GetData();
@@ -29,7 +35,7 @@ public class MainClass extends GetData {
                 centers[i] = new Random().nextInt(5000);
             }
             Arrays.sort(centers);
-
+            System.out.println("First centers: "+ Arrays.toString(Arrays.stream(centers).toArray()));
 
             Map<Integer, List<String[]>> firstClustered = new HashMap<>();
             firstClustered = kmeans(numbers, centers, clusters);
@@ -40,7 +46,6 @@ public class MainClass extends GetData {
 
 
     }
-
 
 
 
@@ -70,7 +75,12 @@ public class MainClass extends GetData {
             clusters.put(cluster1, list);
         }
         clusters.forEach((integer, strings) -> {
-            File file = new File("set1-c"+integer+".txt");
+            int center_index = (int) (strings.size() / 2);
+            System.out.println(""+integer+ Arrays.toString(Arrays.stream(strings.get(center_index)).toArray()));
+
+
+            File file = new File("set1-c" + integer + ".txt");
+
             file.exists();
             try {
                 FileWriter writer = new FileWriter(file);
@@ -88,7 +98,6 @@ public class MainClass extends GetData {
             }
 
         });
-        System.out.println(Arrays.toString(clusters.get(0).toArray()));
 
         return clusters;
     }
