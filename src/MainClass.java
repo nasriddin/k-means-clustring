@@ -25,6 +25,7 @@ public class MainClass extends GetData {
             Map<Integer, double[]> centers = new HashMap<>();
 
 //            TODO Get index of them and select first K points then make a loop. do not go for features
+
             double[] jj = new double[dimensionNumber];
             int a = 0;
             for (int i = 0; i < clusters; i++) {
@@ -38,11 +39,41 @@ public class MainClass extends GetData {
 
             for (double[] key : clusterings.keySet()) {
                 for (int i = 0; i < key.length; i++) {
-                    System.out.print(key[i] + ", ");
+                    System.out.print(key[i] + " ");
                 }
                 System.out.print(clusterings.get(key) + "\n");
             }
 
+            double dimensionalTwo[] = new double[dimensionNumber];
+
+            for (int i = 0; i < iteration; i++) {
+                for (int j = 0; j < clusters; j++) {
+                    List<double[]> list = new ArrayList<>();
+                    for (double[] key : clusterings.keySet()) {
+                        if (clusterings.get(key) == j) {
+                            list.add(key);
+                        }
+                    }
+
+                    dimensionalTwo = centerCalculator(list);
+                    centers.put(j, dimensionalTwo);
+
+                }
+
+                clusterings.clear();
+                clusterings = kmeans(data.dimension, centers, clusters);
+            }
+
+            System.out.println("\nFinal clustering");
+            System.out.println("First dimension\tSecond dimension");
+
+            for (double[] key : clusterings.keySet()) {
+                for (int i = 0; i < key.length; i++) {
+                    System.out.print(key[i] + "\t \t");
+                }
+                System.out.print(clusterings.get(key) + "\n");
+            }
+            execution = scanner.nextInt();
 
         } while (execution == 1);
 
@@ -54,6 +85,25 @@ public class MainClass extends GetData {
 //        return
 //    }
 
+    public static double[] centerCalculator(List<double[]> a) {
+
+        int count = 0;
+        double sum = 0.0;
+        double[] centers = new double[GetData.dimensionNumber];
+        for (int i = 0; i < GetData.dimensionNumber; i++) {
+            sum = 0.0;
+            count = 0;
+            for (double[] x : a) {
+                count++;
+                sum = sum + x[i];
+            }
+            centers[i] = sum / count;
+        }
+        return centers;
+
+    }
+
+
     public static Map<double[], Integer> kmeans(List<double[]> features, Map<Integer, double[]> centers, int cluster) {
         Map<double[], Integer> clusters = new HashMap<>();
         int cluster1 = 0;
@@ -62,7 +112,7 @@ public class MainClass extends GetData {
             double minimum = 999999.0;
             for (int j = 0; j < cluster; j++) {
 
-                    dist = ClustererClass.distanceGet(centers.get(j), x);
+                dist = ClustererClass.distanceGet(centers.get(j), x);
                 if (dist < minimum) {
                     minimum = dist;
                     cluster1 = j;
